@@ -11,7 +11,14 @@ require('../services/passport')
 module.exports = router => {
 
     //example of a secured route
-    router.get('/',passport.authenticate('jwt', { session: false }), 
+    router.get('/', async (req, res) => {
+        logger.info('this is how you call a logger');
+        res.send('test service!')
+    });
+    
+
+    //example of a secured route
+    router.get('/secure',passport.authenticate('jwt', { session: false }), 
     async (req, res) => {
         logger.info('this is how you call a logger');
         res.send('test service!')
