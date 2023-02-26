@@ -25,13 +25,14 @@ module.exports = router => {
     });
     
 
-    router.get('/findgitusers',passport.authenticate('jwt', { session: false }), 
+    router.get('/findgitusers',//passport.authenticate('jwt', { session: false }), 
     async (req,res)=>{
         let error, result, finaljson;
         //----------------only modify this portion--------------
         [error, result] = await to(mybusiness.findGitUsers());
         //-------------------------------------------------------
         finaljson = {"error":error, "result":result}
+        //console.log(finaljson)
         res.send(finaljson);
         
     });
@@ -62,5 +63,48 @@ module.exports = router => {
         res.send(finaljson);
         
     })
+
+    /*-----------------------------------------------------------------------------*/
+    //
+    router.get('/api/products', async(req, res) => {
+        const page = parseInt(req.query.page) || 1; // default to page 1 if not specified
+        const limit = parseInt(req.query.limit) || 5; // default to limit 5 if not specified
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+      
+        const results = {};
+      
+        //replace this code with mongoose call
+        const products = [
+            { id: 1, name: 'Product 1', price: 10 },
+            { id: 2, name: 'Product 2', price: 20 },
+            { id: 3, name: 'Product 3', price: 30 },
+            { id: 4, name: 'Product 4', price: 40 },
+            { id: 5, name: 'Product 5', price: 50 },
+            { id: 6, name: 'Product 6', price: 60 },
+            { id: 7, name: 'Product 7', price: 70 },
+            { id: 8, name: 'Product 8', price: 80 },
+            { id: 9, name: 'Product 9', price: 90 },
+            { id: 10, name: 'Product 10', price: 100 }
+          ];
+
+        if (endIndex < products.length) {
+          results.next = {
+            page: page + 1,
+            limit: limit
+          };
+        }
+      
+        if (startIndex > 0) {
+          results.previous = {
+            page: page - 1,
+            limit: limit
+          };
+        }
+      
+        results.results = products.slice(startIndex, endIndex);
+      
+        res.json(results);
+      });
 
 }

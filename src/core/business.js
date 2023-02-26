@@ -1,6 +1,9 @@
 // all business logic should be present in this core folder
 const to = require('await-to-js').default;
-const request = require('async-request');
+const axios = require('axios')
+const https = require('https');
+
+
 
 module.exports = {
     findGitUsers : findGitUsers
@@ -23,14 +26,19 @@ function createNewUser(){
 function findGitUsers(){
 
     return new Promise(async (resolve, reject)=>{  
-        let error, result, finaljson;        
-        [error, result] = await to(request('https://api.github.com/users?since=135',getoptions));
-        if(error){
-            reject(error);
-        }
-        else{
-            resolve(result);
-        }
+        axios.defaults.timeout = 30000;
+        axios.defaults.httpsAgent = new https.Agent({ keepAlive: true });
+        axios.get('https://dummy.restapiexample.com/api/v1/employees')
+            .then(response => {
+                console.log(response.data)
+                resolve(response.data);
+
+            })
+            .catch(error => {
+                console.log(error)
+                reject(error);
+            });
+
     });
 
 

@@ -9,6 +9,7 @@ const orderSchema = new mongoose.Schema({
   paymentDetails: String,
   // Other relevant details
 });
+
 // Define models
 const Order = mongoose.model('Order', orderSchema);
-]
+
